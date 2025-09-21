@@ -115,7 +115,7 @@ List<Item> dummyItems = [
     name: 'Strawberry Danish',
     description: 'Danish pastry berlapis renyah dengan selai strawberry segar dan topping buah strawberry untuk sentuhan segar dan manis.',
     price: 27000,
-    imageUrl: 'assets/images/menu/strawberry_danish.png',
+    imageUrl: 'assets/images/menu/strawbery_danish.png',
   ),
   Bread(
     id: '4',
