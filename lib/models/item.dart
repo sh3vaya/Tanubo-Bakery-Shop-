@@ -92,6 +92,7 @@ class Drink extends Item {
   void showInfo() {
     print('Drink: $name, Recommended: $isRecommended');
   }
+}
 
 //Data dumy untuk item
 List<Item> dummyItems = [
@@ -112,7 +113,7 @@ List<Item> dummyItems = [
   Bread(
     id: '3',
     name: 'Strawberry Danish',
-    description: 'CDanish pastry berlapis renyah dengan selai strawberry segar dan topping buah strawberry untuk sentuhan segar dan manis.',
+    description: 'Danish pastry berlapis renyah dengan selai strawberry segar dan topping buah strawberry untuk sentuhan segar dan manis.',
     price: 27000,
     imageUrl: 'assets/images/menu/strawberry_danish.png',
   ),
@@ -227,4 +228,3 @@ List<Item> dummyItems = [
     isRecommended: false,
   ),
 ];
-}
