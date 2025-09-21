@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'profile_screen.dart';
 import 'vip_screen.dart';
 import '../models/vip_level.dart';
 import '../models/item.dart';
@@ -21,8 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _updateGreeting();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _updateGreeting();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {_updateGreeting();
     });
   }
 
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     case 2:
       return _buildVip(); // VIP pindah ke index 2
     case 3:
-      return _buildProfil(); // Profile pindah ke index 3
+      return ProfileScreen(); // Profile pindah ke index 3
     default:
       return _buildBeranda();
     }
@@ -98,15 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   return VipPage(userTotalSpent: userSpent, userLevel: userLevel);
 }
-
-  Widget _buildProfil() {
-    return const Center(
-      child: Text(
-        'Halaman Profil',
-        style: TextStyle(fontSize: 24, color: Color(0xFF5D4037)),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
