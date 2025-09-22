@@ -6,8 +6,10 @@ class CartService with ChangeNotifier {
   final List<CartItem> _items = [];
 
   List<CartItem> get items => _items;
+  
   int get totalItems => _items.fold(0, (sum, item) => sum + item.quantity);
-  double get totalPrice => _items.fold(0.0, (sum, item) => sum + item.totalPrice);
+  
+  double get totalPrice => _items.fold(0.0, (sum, item) => sum + (item.item.price * item.quantity));
 
   void addToCart(Item item) {
     final existingIndex = _items.indexWhere((cartItem) => cartItem.item.id == item.id);

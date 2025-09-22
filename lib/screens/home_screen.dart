@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'profile_screen.dart';
-import 'vip_screen.dart';
-import '../models/vip_level.dart';
-import '../models/item.dart';
-import 'menu_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:tanubo/screens/profile_screen.dart';
+import 'package:tanubo/screens/menu_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _updateGreeting();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {_updateGreeting();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _updateGreeting();
     });
   }
 
@@ -57,17 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody() {
-  switch (_selectedIndex) {
-    case 0:
-      return _buildBeranda();
-    case 1:
-      return const MenuScreen(); // Tab menu
-    case 2:
-      return _buildVip(); // VIP pindah ke index 2
-    case 3:
-      return ProfileScreen(); // Profile pindah ke index 3
-    default:
-      return _buildBeranda();
+    switch (_selectedIndex) {
+      case 0:
+        return _buildBeranda();
+      case 1:
+        return const MenuScreen();
+      case 2:
+        return _buildPlaceholderScreen('VIP Screen'); // Ganti dengan placeholder
+      case 3:
+        return ProfileScreen();
+      default:
+        return _buildBeranda();
     }
   }
 
@@ -78,26 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
         style: const TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF5D4037), // warna coklat tua
+          color: Color(0xFF5D4037),
         ),
       ),
     );
   }
 
-  Widget _buildVip() {
-  int userSpent = 800000; // Contoh total belanja user, ganti dengan data asli
-  VipLevel userLevel;
-
-  if (userSpent < 700000) {
-    userLevel = SilverLevel();
-  } else if (userSpent < 1400000) {
-    userLevel = GoldLevel();
-  } else {
-    userLevel = DiamondLevel();
+  Widget _buildPlaceholderScreen(String title) {
+    return Center(
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF5D4037),
+        ),
+      ),
+    );
   }
-
-  return VipPage(userTotalSpent: userSpent, userLevel: userLevel);
-}
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF5D4037), // warna coklat tua
+        selectedItemColor: const Color(0xFF5D4037),
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [
@@ -120,10 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant_menu),
             label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'VIP',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

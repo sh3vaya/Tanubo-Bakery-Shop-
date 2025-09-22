@@ -294,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: Text('Ulangi Tutorial'),
+            child: Text('Logout'),
           ),
         ),
       ],
