@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo
+                  // Logo custom
                   Container(
                     width: 100,
                     height: 100,
@@ -74,10 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    child: Icon(
-                      Icons.local_cafe,
-                      size: 50,
-                      color: Color(0xFF5D4037),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Image.asset(
+                        'assets/images/logoo.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
 

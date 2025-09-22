@@ -7,6 +7,7 @@ import 'screens/menu_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/cart_screen.dart';
 import 'services/cart_service.dart';
+import 'services/user_service.dart';
 
 void main() {
   runApp(TanuboApp());
@@ -18,6 +19,7 @@ class TanuboApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartService()),
+        ChangeNotifierProvider(create: (_) => UserService()),
       ],
       child: MaterialApp(
         title: 'Tanubo Bakery',

@@ -11,14 +11,14 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(item.name),
-        backgroundColor: const Color(0xFF5D4037), // Tambahkan warna coklat
+        backgroundColor: const Color(0xFF5D4037),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image - GANTI Image.network MENJADI Image.asset
+            // Image 
             Container(
               height: 250,
               width: double.infinity,
@@ -34,7 +34,7 @@ class DetailScreen extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset( // ✅ GANTI MENJADI Image.asset
+                child: Image.asset( 
                   item.imageUrl,
                   height: 250,
                   width: double.infinity,

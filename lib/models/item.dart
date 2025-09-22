@@ -160,7 +160,7 @@ List<Item> dummyItems = [
     name: 'Tiramisu',
     description: 'Dessert klasik Italia dengan lapisan sponge cake kopi dan krim mascarpone yang lembut, taburan cocoa di atasnya.',
     price: 40000,
-    imageUrl: 'assets/images/menu/chocolate_lava_cake.png',
+    imageUrl: 'assets/images/menu/tiramisu.png',
     isPopular: false,
   ),
   Drink(

@@ -9,7 +9,7 @@ class CartItem {
     this.quantity = 1,
   });
 
-  double get totalPrice => item.price * quantity; // PASTIKAN ADA INI
+  double get totalPrice => item.price * quantity;
 
   void incrementQuantity() {
     quantity++;

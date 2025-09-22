@@ -1,4 +1,30 @@
-// Abstract class untuk inheritance
+// Buy 1 Get 1 voucher
+class BuyOneGetOneVoucher extends Voucher {
+  BuyOneGetOneVoucher({
+    required String id,
+    required String title,
+    required String description,
+    required DateTime expiryDate,
+    required double minPurchase,
+  }) : super(
+          id: id,
+          title: title,
+          description: description,
+          expiryDate: expiryDate,
+          minPurchase: minPurchase,
+        );
+
+  @override
+  double applyDiscount(double totalAmount) {
+    // No direct discount, just a free item
+    return 0;
+  }
+
+  @override
+  bool isValid(double totalAmount) {
+    return totalAmount >= minPurchase;
+  }
+}
 abstract class Voucher {
   final String id;
   final String title;
@@ -86,7 +112,6 @@ class BuyXGetYVoucher extends Voucher {
     return totalAmount >= minPurchase && DateTime.now().isBefore(expiryDate);
   }
 }
-
 // Free item voucher - inheritance
 class FreeItemVoucher extends Voucher {
   final String freeItemName;

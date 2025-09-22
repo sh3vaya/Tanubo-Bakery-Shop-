@@ -18,14 +18,35 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[200],
+      backgroundColor: const Color(0xFF5D4037),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.cake, size: 100, color: Colors.white),
-            SizedBox(height: 20),
-            Text(
+            Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Image.asset(
+                  'assets/images/logoo.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
               'Tanubo',
               style: TextStyle(
                 fontSize: 48,
@@ -34,9 +55,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 fontFamily: 'Cursive',
               ),
             ),
-            SizedBox(height: 10),
-            Text(
-              'Created by YourName',
+            const SizedBox(height: 10),
+            const Text(
+              'Created by Najwa Chava S.',
               style: TextStyle(color: Colors.white70, fontSize: 16),
             ),
           ],
