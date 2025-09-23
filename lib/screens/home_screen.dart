@@ -1,3 +1,5 @@
+import 'package:tanubo/widgets/loyalty_card_widget.dart';
+import '../models/user.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +7,6 @@ import 'package:tanubo/services/user_service.dart';
 import 'package:tanubo/screens/profile_screen.dart';
 import 'package:tanubo/screens/menu_screen.dart';
 import 'package:tanubo/screens/voucher_screen.dart';
-import '../models/user.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +17,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Loyalty card state
+  int _stampCount = 0;
+  DateTime _promoEnd = DateTime(2025, 9, 30);
+  String _loyaltyMessage = '';
+
+  void _handleTransact() {
+    final today = DateTime.now();
+    if (today.isAfter(_promoEnd)) {
+      setState(() {
+        _loyaltyMessage = 'Promo sudah berakhir!';
+      });
+      return;
+    }
+    setState(() {
+      _stampCount++;
+      if (_stampCount == 7) {
+        _loyaltyMessage = 'Selamat! Anda mendapatkan minuman gratis!';
+        Future.delayed(Duration(seconds: 2), () {
+          setState(() {
+            _stampCount = 0;
+            _loyaltyMessage = '';
+          });
+        });
+      } else {
+        _loyaltyMessage = '';
+      }
+    });
+  }
   int _selectedIndex = 0;
   late Timer _timer;
   String _greeting = '';
@@ -100,12 +129,18 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _buildHeaderSection(user.name),
               const SizedBox(height: 24),
+              LoyaltyCardWidget(
+                stampCount: _stampCount,
+                promoEnd: _promoEnd,
+                onTransact: _handleTransact,
+                promoActive: DateTime.now().isBefore(_promoEnd),
+                message: _loyaltyMessage,
+              ),
+              const SizedBox(height: 24),
               _buildDailyRewardSection(userService),
               const SizedBox(height: 24),
-              _buildPurchaseSection(user),
-              const SizedBox(height: 24),
-              _buildPointsSection(user),
-              const SizedBox(height: 24),
+              // _buildPointsSection(user) dihapus
+              // const SizedBox(height: 24),
               _buildQuickActionsSection(),
             ],
           ),
@@ -127,6 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
       greetingIcon = Icons.nights_stay_rounded;
     }
 
+    final userService = Provider.of<UserService>(context, listen: false);
+    final user = userService.currentUser;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -158,11 +195,37 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text('$_greeting,',
                     style: const TextStyle(fontSize: 20, color: Colors.white70)),
-                Text(userName,
-                    style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                Row(
+                  children: [
+                    Text(userName,
+                        style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                    const SizedBox(width: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFF3E0),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.monetization_on, color: Color(0xFFBCA177), size: 22),
+                          const SizedBox(width: 4),
+                          Text(
+                            user != null ? '${user.totalPoints}' : '0',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFBCA177),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 4),
                 Text(_currentTime,
                     style: const TextStyle(fontSize: 14, color: Colors.white70)),
@@ -177,6 +240,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // === Daily Reward ===
   Widget _buildDailyRewardSection(UserService userService) {
     final dailyLoginCount = userService.currentUser?.dailyLoginCount ?? 0;
+    final todayCoin = userService.getTodayCoinReward();
+    final claimed = !userService.canClaimDailyReward();
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -185,152 +250,105 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '🔄 Daily Login Reward',
+            Text(
+              'Claim Koin Harian',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF5D4037),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             LinearProgressIndicator(
               value: dailyLoginCount / 7,
               backgroundColor: Colors.grey[300],
-              color: const Color(0xFF5D4037),
+              color: Color(0xFF5D4037),
               minHeight: 8,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Hari ke-$dailyLoginCount dari 7',
-                  style: const TextStyle(fontSize: 14),
-                ),
-                Text(
-                  userService.getNextReward(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: userService.canClaimDailyReward()
-                        ? Colors.green
-                        : const Color(0xFF5D4037),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            if (userService.canClaimDailyReward())
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _claimDailyReward(context, userService);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              children: List.generate(7, (i) {
+                final isToday = i == dailyLoginCount;
+                final isClaimed = i < dailyLoginCount;
+                return Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2),
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isToday
+                          ? Colors.yellow[100]
+                          : isClaimed
+                              ? Colors.grey[200]
+                              : Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: isToday
+                            ? Colors.orange
+                            : Colors.grey[300]!,
+                        width: isToday ? 2 : 1,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(Icons.monetization_on,
+                            color: isToday ? Colors.orange : Color(0xFFBCA177), size: 22),
+                        SizedBox(height: 4),
+                        Text(
+                          '${userService.dailyCoinRewards[i]}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isToday ? Colors.orange : Color(0xFF5D4037),
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text('Hari ${i + 1}', style: TextStyle(fontSize: 11)),
+                        if (isClaimed)
+                          Text('✓', style: TextStyle(color: Colors.green, fontSize: 12)),
+                      ],
                     ),
                   ),
-                  child: const Text('Klaim Reward Gratis!'),
-                ),
-              ),
+                );
+              }),
+            ),
+            SizedBox(height: 12),
+            (!claimed && todayCoin > 0)
+                ? SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final reward = userService.claimDailyCoin();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Berhasil klaim $reward koin!')),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 225, 152, 34),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text('Klaim $todayCoin Koin Gratis!'),
+                    ),
+                  )
+                : claimed
+                    ? Center(
+                        child: Text(
+                          'Sudah diklaim hari ini!',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      )
+                    : SizedBox.shrink(),
           ],
         ),
       ),
     );
   }
 
-  // === Statistik Pembelian ===
-  Widget _buildPurchaseSection(User user) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '📊 Statistik Pembelian',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF5D4037),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatItem('Hari Ini', '${user.purchaseCount}x'),
-                _buildStatItem('Total', '${user.totalPoints} pts'),
-                _buildStatItem(
-                    'Reward', user.claimedVouchers.length.toString()),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF5D4037),
-          ),
-        ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      ],
-    );
-  }
 
   // === Points ===
-  Widget _buildPointsSection(User user) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '⭐ Points Anda',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF5D4037),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              '${user.totalPoints} Points',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Tukar points dengan voucher spesial!',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   // === Akses Cepat ===
   Widget _buildQuickActionsSection() {
@@ -338,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          '🚀 Akses Cepat',
+          'Akses Cepat',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -394,33 +412,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _claimDailyReward(BuildContext context, UserService userService) {
-    userService.claimVoucher('Reward Harian Gratis');
-    if (userService.currentUser != null) {
-      userService.currentUser!.totalPoints += 100;
-      userService.currentUser!.dailyLoginCount = 0;
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('🎉 Selamat! Anda mendapatkan minuman gratis!'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
-
+  // Removed unused _claimDailyReward method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tanubo'),
-        backgroundColor: const Color(0xFF5D4037),
+        backgroundColor: const Color(0xFFF5E9DA),
+        iconTheme: const IconThemeData(color: Color(0xFF5D4037)),
+        elevation: 2,
+        title: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Image.asset('assets/images/logoo.png', fit: BoxFit.contain),
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Tanubo',
+              style: TextStyle(
+                color: Color(0xFF5D4037),
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+               // letterSpacing: 2,
+              ),
+            ),
+          ],
+        ),
       ),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF5D4037),
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: const Color(0xFFBCA177),
+        unselectedItemColor: const Color(0xFF8D6E63),
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
@@ -429,7 +466,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),
-    );
+  );
   }
-
 }

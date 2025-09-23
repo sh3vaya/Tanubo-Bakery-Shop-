@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import '../services/user_service.dart';
 import 'order_history_screen.dart';
@@ -17,11 +16,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserService>(context).currentUser;
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF5E9DA),
       appBar: AppBar(
-        title: const Text("My Profile"),
-        backgroundColor: Colors.orangeAccent,
+        title: const Text(
+          "My Profile",
+          style: TextStyle(
+            color: Color(0xFF5D4037),
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            letterSpacing: 2,
+          ),
+        ),
+        backgroundColor: const Color(0xFFF5E9DA),
         elevation: 0,
+        iconTheme: const IconThemeData(color: Color(0xFF5D4037)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -30,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildHeader(user),
             const SizedBox(height: 20),
             _buildIdentitySection(user),
+            const SizedBox(height: 24),
             // Pengaturan lain
             _buildMenuSection(context),
           ],
@@ -40,41 +49,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // === HEADER ===
   Widget _buildHeader(user) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 32,
-            backgroundColor: Colors.orangeAccent,
-            child: const Icon(Icons.person, size: 32, color: Colors.white),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(user?.name ?? '-',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Text(user?.email ?? '-',
-                    style: const TextStyle(fontSize: 14, color: Colors.grey)),
-              ],
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 38,
+              backgroundColor: const Color(0xFFBCA177),
+              child: const Icon(Icons.person, size: 38, color: Colors.white),
             ),
-          ),
-        ],
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user?.name ?? '-',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF5D4037),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const Icon(Icons.email, size: 18, color: Color(0xFF8D6E63)),
+                      const SizedBox(width: 6),
+                      Text(
+                        user?.email ?? '-',
+                        style: const TextStyle(fontSize: 15, color: Color(0xFF8D6E63)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -83,43 +99,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Hapus field dan widget yang tidak ada di User
 
   Widget _buildIdentitySection(user) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Identitas Diri",
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          TextFormField(
-            initialValue: user?.name ?? '-',
-            decoration: const InputDecoration(
-              labelText: "Nama Lengkap",
-              border: OutlineInputBorder(),
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: const [
+                Icon(Icons.info_outline, color: Color(0xFFBCA177)),
+                SizedBox(width: 8),
+                Text(
+                  "Account",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Color(0xFF5D4037),
+                  ),
+                ),
+              ],
             ),
-            readOnly: true,
-          ),
-          const SizedBox(height: 12),
-          TextFormField(
-            initialValue: user?.email ?? '-',
-            decoration: const InputDecoration(
-              labelText: "Email",
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFF5E9DA),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Color(0xFFBCA177), width: 1),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.person, color: Color(0xFF8D6E63)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user?.name ?? '-',
+                      style: const TextStyle(fontSize: 16, color: Color(0xFF5D4037)),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            readOnly: true,
-          ),
-        ],
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFF5E9DA),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Color(0xFFBCA177), width: 1),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.email, color: Color(0xFF8D6E63)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user?.email ?? '-',
+                      style: const TextStyle(fontSize: 16, color: Color(0xFF5D4037)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
