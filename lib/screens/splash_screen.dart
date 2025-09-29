@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -46,20 +48,28 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Tanubo',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
-                fontFamily: 'Cursive',
-              ),
+              )
             ),
-            const SizedBox(height: 10),
-            const Text(
+           
+            const SizedBox(height: 20),
+            LoadingAnimationWidget.waveDots(
+              color: Colors.white,
+              size: 50,
+            ),
+            Text(
               'Created by Najwa Chava S.',
-              style: TextStyle(color: Colors.white70, fontSize: 16),
-            ),
+              style: GoogleFonts.poppins(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withOpacity(0.2),
+              ),             
+            )
           ],
         ),
       ),

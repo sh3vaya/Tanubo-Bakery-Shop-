@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/user_service.dart';
-import '../models/user.dart';
 import '../models/voucher.dart';
 
 class VoucherScreen extends StatelessWidget {
@@ -50,7 +49,7 @@ class VoucherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Voucher Saya'),
+        title: const Text('Voucher Saya', style: TextStyle(color: Colors.white),),
         backgroundColor: const Color(0xFF5D4037),
       ),
       body: Consumer<UserService>(

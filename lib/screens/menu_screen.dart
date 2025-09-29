@@ -231,13 +231,17 @@ class MenuScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 290,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: breads.length,
-                      itemBuilder: (context, index) {
-                        final bread = breads[index];
-                        return _buildMenuItemCard(bread, context);
-                      },
+                    child: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(overscroll: false),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: breads.length,
+                        itemBuilder: (context, index) {
+                          final bread = breads[index];
+                          return _buildMenuItemCard(bread, context);
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -258,13 +262,17 @@ class MenuScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 290,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: cakes.length,
-                      itemBuilder: (context, index) {
-                        final cake = cakes[index];
-                        return _buildMenuItemCard(cake, context);
-                      },
+                    child: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(overscroll: false),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: cakes.length,
+                        itemBuilder: (context, index) {
+                          final cake = cakes[index];
+                          return _buildMenuItemCard(cake, context);
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -285,13 +293,17 @@ class MenuScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 290,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: drinks.length,
-                      itemBuilder: (context, index) {
-                        final drink = drinks[index];
-                        return _buildMenuItemCard(drink, context);
-                      },
+                    child: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(overscroll: false),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: drinks.length,
+                        itemBuilder: (context, index) {
+                          final drink = drinks[index];
+                          return _buildMenuItemCard(drink, context);
+                        },
+                      ),
                     ),
                   ),
                 ],

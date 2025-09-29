@@ -1,5 +1,4 @@
 import 'package:tanubo/widgets/loyalty_card_widget.dart';
-import '../models/user.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
