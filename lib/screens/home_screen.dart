@@ -347,15 +347,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-  // === Points ===
-
-  // === Akses Cepat ===
+  // === Akses Cepat (diubah jadi About Section untuk Bakery App) ===
   Widget _buildQuickActionsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Akses Cepat',
+          'Tentang Aplikasi',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -363,51 +361,51 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 3,
-          children: [
-            _buildQuickActionButton('Belanja Sekarang', Icons.shopping_cart, () {
-              _onItemTapped(1);
-            }),
-            _buildQuickActionButton('Lihat Voucher', Icons.confirmation_number,
-                () {
-              final userService = Provider.of<UserService>(context, listen: false);
-              if (userService.currentUser != null) {
-                // Tambahkan voucher dummy jika belum ada
-                if (userService.currentUser!.claimedVouchers.isEmpty) {
-                  userService.currentUser!.claimedVouchers.add('Voucher Diskon 10%');
-                }
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const VoucherScreen()),
-              );
-            }),
-          ],
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Color(0xFFFFF8E1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Color(0xFFBCA177), width: 1),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Row(
+                children: [
+                  Icon(Icons.cake, color: Color(0xFF5D4037)),
+                  SizedBox(width: 8),
+                  Text(
+                    'Bakery Bliss App 🍰',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF5D4037),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Bakery Bliss adalah aplikasi toko roti modern yang memudahkan '
+                    'pelanggan dalam memesan kue, roti, dan pastry favorit secara cepat dan praktis. '
+                    'Didesain dengan antarmuka yang sederhana dan hangat untuk pecinta bakery sejati!',
+                style: TextStyle(fontSize: 13, color: Color(0xFF5D4037)),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Versi: 1.0.0',
+                style: TextStyle(fontSize: 12, color: Colors.brown),
+              ),
+              Text(
+                'Dikembangkan oleh Tim Bakery Dev',
+                style: TextStyle(fontSize: 12, color: Colors.brown),
+              ),
+            ],
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildQuickActionButton(
-      String text, IconData icon, VoidCallback onTap) {
-    return ElevatedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(text, style: const TextStyle(fontSize: 12)),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF5D4037),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: Color(0xFF5D4037)),
-        ),
-      ),
     );
   }
 

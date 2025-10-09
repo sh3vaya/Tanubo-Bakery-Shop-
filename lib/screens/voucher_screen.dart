@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/user_service.dart';
 import '../models/voucher.dart';
 
+
 class VoucherScreen extends StatelessWidget {
   const VoucherScreen({super.key});
 
@@ -25,15 +26,6 @@ class VoucherScreen extends StatelessWidget {
         minPurchase: 50000, // minimal pembelian Rp50.000
         discountPercentage: 20,
         maxDiscount: 15000,
-      ),
-      DiscountVoucher(
-        id: 'v3',
-        title: 'Gratis Kopi',
-        description: 'Beli minimal Rp70.000, dapatkan kopi gratis.',
-        expiryDate: DateTime.now().add(const Duration(days: 10)),
-        minPurchase: 70000, // minimal pembelian Rp70.000
-        discountPercentage: 100,
-        maxDiscount: 25000,
       ),
       BuyOneGetOneVoucher(
         id: 'v4',
