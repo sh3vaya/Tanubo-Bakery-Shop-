@@ -214,11 +214,15 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                                   cartService.addToCart(item);
                                 },
                               ),
-                              // Tombol kurang item
+                              // Tombol kurang item: decrement quantity if >1, otherwise remove
                               IconButton(
                                 icon: const Icon(Icons.remove_circle, color: Colors.red),
                                 onPressed: () {
-                                  cartService.removeFromCart(item.id);
+                                  if (cartItem.quantity > 1) {
+                                    cartService.updateQuantity(item.id, cartItem.quantity - 1);
+                                  } else {
+                                    cartService.removeFromCart(item.id);
+                                  }
                                 },
                               ),
                             ],
@@ -290,7 +294,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+                child: ElevatedButton(
                 onPressed: () {
                   final order = Order(
                     items: List.from(cartItems),
@@ -301,8 +305,10 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                   userService.addOrder(order);
                   cartService.clearCart();
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Pesanan berhasil!')));
-                      (const Duration(milliseconds: 500), () {
+                    const SnackBar(content: Text('Pesanan berhasil!')),
+                  );
+                  // Navigate back to menu after a short delay so user sees the snackbar
+                  Future.delayed(const Duration(milliseconds: 500), () {
                     Navigator.pushReplacementNamed(context, '/menu');
                   });
                 },

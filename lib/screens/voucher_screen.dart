@@ -75,8 +75,7 @@ class VoucherScreen extends StatelessWidget {
                           onPressed: user == null
                               ? null
                               : () {
-                                  user.claimedVouchers.add(voucher.id);
-                                  userService.notifyListeners();
+                                  userService.claimVoucher(voucher.id);
                                 },
                           child: const Text('Klaim'),
                         ),
